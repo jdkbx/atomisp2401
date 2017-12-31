@@ -1,22 +1,8 @@
-From c92075a6cb0d4184f085f53464c663a62d4dc4c4 Mon Sep 17 00:00:00 2001
-From: Vincent Hervieux <vincent.hervieux@gmail.com>
-Date: Fri, 6 Oct 2017 14:26:13 +0200
-Subject: [PATCH] atomisp_ISP2401_compilfix
-
----
- .../media/atomisp/pci/atomisp2/atomisp_cmd.c       | 14 +++-
- .../media/atomisp/pci/atomisp2/atomisp_v4l2.c      |  6 +-
- .../css2400/runtime/debug/src/ia_css_debug.c       |  6 --
- .../media/atomisp/pci/atomisp2/css2400/sh_css.c    | 95 ----------------------
- .../atomisp/pci/atomisp2/css2400/sh_css_params.c   | 10 +--
- .../media/atomisp/pci/atomisp2/css2400/sh_css_sp.c |  8 +-
- 6 files changed, 21 insertions(+), 118 deletions(-)
-
 diff --git a/drivers/staging/media/atomisp/pci/atomisp2/atomisp_cmd.c b/drivers/staging/media/atomisp/pci/atomisp2/atomisp_cmd.c
-index f48bf451c1f5..3a9ed64c1f9d 100644
+index debf0e3853ff..a920b88958c7 100644
 --- a/drivers/staging/media/atomisp/pci/atomisp2/atomisp_cmd.c
 +++ b/drivers/staging/media/atomisp/pci/atomisp2/atomisp_cmd.c
-@@ -1045,9 +1045,8 @@ void atomisp_buf_done(struct atomisp_sub_device *asd, int error,
+@@ -1042,9 +1042,8 @@ void atomisp_buf_done(struct atomisp_sub_device *asd, int error,
  				asd->re_trigger_capture = false;
  				dev_dbg(isp->dev, "Trigger capture again for new buffer. err=%d\n",
  						err);
@@ -28,7 +14,7 @@ index f48bf451c1f5..3a9ed64c1f9d 100644
  #endif
  		}
  		break;
-@@ -1205,6 +1204,15 @@ void atomisp_buf_done(struct atomisp_sub_device *asd, int error,
+@@ -1202,6 +1201,15 @@ void atomisp_buf_done(struct atomisp_sub_device *asd, int error,
  			atomisp_css_update_isp_params(asd);
  		}
  		break;
@@ -45,10 +31,10 @@ index f48bf451c1f5..3a9ed64c1f9d 100644
  		break;
  	}
 diff --git a/drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c b/drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c
-index 663aa916e3ca..dfb647f0bcf9 100644
+index 548e00e7d67b..6c3505cd3002 100644
 --- a/drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c
 +++ b/drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c
-@@ -1602,4 +1602,8 @@ module_exit(atomisp_exit);
+@@ -1571,4 +1571,8 @@ module_exit(atomisp_exit);
  MODULE_AUTHOR("Wen Wang <wen.w.wang@intel.com>");
  MODULE_AUTHOR("Xiaolin Zhang <xiaolin.zhang@intel.com>");
  MODULE_LICENSE("GPL");
@@ -59,7 +45,7 @@ index 663aa916e3ca..dfb647f0bcf9 100644
 +MODULE_DESCRIPTION("Intel ATOM Platform ISP 2401 Driver");
 +#endif
 diff --git a/drivers/staging/media/atomisp/pci/atomisp2/css2400/runtime/debug/src/ia_css_debug.c b/drivers/staging/media/atomisp/pci/atomisp2/css2400/runtime/debug/src/ia_css_debug.c
-index 0fa7cb2423d8..e8d7e0439ad6 100644
+index f22d73b56bc6..a3ac069f4824 100644
 --- a/drivers/staging/media/atomisp/pci/atomisp2/css2400/runtime/debug/src/ia_css_debug.c
 +++ b/drivers/staging/media/atomisp/pci/atomisp2/css2400/runtime/debug/src/ia_css_debug.c
 @@ -39,9 +39,6 @@
@@ -83,7 +69,7 @@ index 0fa7cb2423d8..e8d7e0439ad6 100644
  #include "fifo_monitor.h"
  
 diff --git a/drivers/staging/media/atomisp/pci/atomisp2/css2400/sh_css.c b/drivers/staging/media/atomisp/pci/atomisp2/css2400/sh_css.c
-index f92b6a9f77eb..068922465fd8 100644
+index 322bb3de6098..098d9664be72 100644
 --- a/drivers/staging/media/atomisp/pci/atomisp2/css2400/sh_css.c
 +++ b/drivers/staging/media/atomisp/pci/atomisp2/css2400/sh_css.c
 @@ -1494,7 +1494,6 @@ sh_css_invalidate_shading_tables(struct ia_css_stream *stream)
@@ -355,7 +341,7 @@ index f92b6a9f77eb..068922465fd8 100644
  }
  
 diff --git a/drivers/staging/media/atomisp/pci/atomisp2/css2400/sh_css_params.c b/drivers/staging/media/atomisp/pci/atomisp2/css2400/sh_css_params.c
-index 48224370b8bf..f975f2238423 100644
+index fbb36112fe3c..638860d64909 100644
 --- a/drivers/staging/media/atomisp/pci/atomisp2/css2400/sh_css_params.c
 +++ b/drivers/staging/media/atomisp/pci/atomisp2/css2400/sh_css_params.c
 @@ -2697,7 +2697,6 @@ ia_css_pipe_get_isp_config(struct ia_css_pipe *pipe,
@@ -397,7 +383,7 @@ index 48224370b8bf..f975f2238423 100644
  			 * Tell the SP which queues are not empty,
  			 * by sending the software event.
 diff --git a/drivers/staging/media/atomisp/pci/atomisp2/css2400/sh_css_sp.c b/drivers/staging/media/atomisp/pci/atomisp2/css2400/sh_css_sp.c
-index e6a345979ff1..54f84a1fb8bf 100644
+index 6fc00fc402b1..e347d81b6def 100644
 --- a/drivers/staging/media/atomisp/pci/atomisp2/css2400/sh_css_sp.c
 +++ b/drivers/staging/media/atomisp/pci/atomisp2/css2400/sh_css_sp.c
 @@ -117,7 +117,8 @@ copy_isp_stage_to_sp_stage(void)
@@ -422,6 +408,3 @@ index e6a345979ff1..54f84a1fb8bf 100644
  	ia_css_fpn_configure(binary,  &binary->in_frame_info);
  	ia_css_crop_configure(binary, &args->delay_frames[0]->info);
  	ia_css_qplane_configure(pipeline, binary, &binary->in_frame_info);
--- 
-2.11.0
-

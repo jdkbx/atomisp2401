@@ -3,9 +3,9 @@ index 41f116d52060..3112d46ff889 100644
 --- a/drivers/staging/media/atomisp/pci/Kconfig
 +++ b/drivers/staging/media/atomisp/pci/Kconfig
 @@ -12,3 +12,26 @@ config VIDEO_ATOMISP
-          camera imaging subsystem.
-          To compile this driver as a module, choose M here: the
-          module will be called atomisp
+ 	  camera imaging subsystem.
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called atomisp
 +
 +choice
 +        prompt "Intel Atom Image Signal Processor Driver Type"
@@ -30,10 +30,10 @@ index 41f116d52060..3112d46ff889 100644
 +endchoice
 +
 diff --git a/drivers/staging/media/atomisp/pci/atomisp2/Makefile b/drivers/staging/media/atomisp/pci/atomisp2/Makefile
-index 2bd98f0667ec..27ac23c0c18d 100644
+index ac3805345f20..1f7ac360ccfc 100644
 --- a/drivers/staging/media/atomisp/pci/atomisp2/Makefile
 +++ b/drivers/staging/media/atomisp/pci/atomisp2/Makefile
-@@ -155,7 +155,7 @@  atomisp-objs += \
+@@ -156,7 +156,7 @@ atomisp-objs += \
  	hmm/hmm_dynamic_pool.o \
  	hrt/hive_isp_css_mm_hrt.o \
  	atomisp_v4l2.o
@@ -42,7 +42,7 @@ index 2bd98f0667ec..27ac23c0c18d 100644
  # These will be needed when clean merge CHT support nicely into the driver
  # Keep them here handy for when we get to that point
  #
-@@ -347,8 +347,16 @@  DEFINES := -DHRT_HW -DHRT_ISP_CSS_CUSTOM_HOST -DHRT_USE_VIR_ADDRS -D__HOST__
+@@ -348,8 +348,16 @@ DEFINES := -DHRT_HW -DHRT_ISP_CSS_CUSTOM_HOST -DHRT_USE_VIR_ADDRS -D__HOST__
  #DEFINES += -DPUNIT_CAMERA_BUSY
  #DEFINES += -DUSE_KMEM_CACHE
  

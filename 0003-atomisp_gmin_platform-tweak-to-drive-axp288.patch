@@ -1,5 +1,5 @@
 diff --git a/drivers/staging/media/atomisp/platform/intel-mid/atomisp_gmin_platform.c b/drivers/staging/media/atomisp/platform/intel-mid/atomisp_gmin_platform.c
-index bf9f34b7ad72..ff260c5cb9ba 100644
+index d8b7183db252..87216bc35648 100644
 --- a/drivers/staging/media/atomisp/platform/intel-mid/atomisp_gmin_platform.c
 +++ b/drivers/staging/media/atomisp/platform/intel-mid/atomisp_gmin_platform.c
 @@ -8,6 +8,7 @@
@@ -296,7 +296,7 @@ index bf9f34b7ad72..ff260c5cb9ba 100644
  const struct atomisp_platform_data *atomisp_get_platform_data(void)
  {
  	return &pdata;
-@@ -153,6 +412,8 @@ int atomisp_register_i2c_module(struct v4l2_subdev *subdev,
+@@ -151,6 +410,8 @@ int atomisp_register_i2c_module(struct v4l2_subdev *subdev,
  	bi->flags = client->flags;
  	bi->addr = client->addr;
  	bi->irq = client->irq;
@@ -305,37 +305,43 @@ index bf9f34b7ad72..ff260c5cb9ba 100644
  	bi->platform_data = plat_data;
  
  	return 0;
-@@ -229,6 +490,21 @@ static const struct gmin_cfg_var t100_vars[] = {
+@@ -227,6 +488,21 @@ static struct gmin_cfg_var t100_vars[] = {
  	{},
  };
  
-+static const struct gmin_cfg_var cht_cr_vars[] = {
-+	/* For MRD front camera ov2680 with MRD default BIOS */
-+	{ "OVTI2680:00_CamClk",          "2" },
-+	{ "OVTI2680:00_ClkSrc",          "0" },
-+	{ "OVTI2680:00_CsiPort",         "0" },
-+	{ "OVTI2680:00_CsiLanes",        "1" },
++static struct gmin_cfg_var cht_cr_vars[] = {
++       /* For MRD front camera ov2680 with MRD default BIOS */
++       { "OVTI2680:00_CamClk",          "2" },
++       { "OVTI2680:00_ClkSrc",          "0" },
++       { "OVTI2680:00_CsiPort",         "0" },
++       { "OVTI2680:00_CsiLanes",        "1" },
 +
-+	/* For MRD rear camera ov2680 with MRD default BIOS */
-+	{ "OVTI2680:01_CamClk",          "4" },
-+	{ "OVTI2680:01_ClkSrc",          "0" },
-+	{ "OVTI2680:01_CsiPort",         "1" },
-+	{ "OVTI2680:01_CsiLanes",        "1" },
-+	{},
++       /* For MRD rear camera ov2680 with MRD default BIOS */
++       { "OVTI2680:01_CamClk",          "4" },
++       { "OVTI2680:01_ClkSrc",          "0" },
++       { "OVTI2680:01_CsiPort",         "1" },
++       { "OVTI2680:01_CsiLanes",        "1" },
++       {},
 +};
 +
- static const struct gmin_cfg_var mrd7_vars[] = {
+ static struct gmin_cfg_var mrd7_vars[] = {
  	{"INT33F8:00_CamType", "1"},
  	{"INT33F8:00_CsiPort", "1"},
-@@ -277,6 +553,7 @@ static const struct {
- } hard_vars[] = {
- 	{ "BYT-T FFD8", ffrd8_vars },
- 	{ "T100TA", t100_vars },
-+	{ "Cherry Trail CR", cht_cr_vars },
- 	{ "MRD7", mrd7_vars },
- 	{ "ST70408", ecs7_vars },
- 	{ "VTA0803", i8880_vars },
-@@ -292,14 +569,32 @@ static const struct {
+@@ -283,6 +559,13 @@ static const struct dmi_system_id gmin_vars[] = {
+ 		},
+ 		.driver_data = t100_vars,
+ 	},
++	{
++		.ident = "Cherry Trail CR",
++		.matches = {
++			DMI_MATCH(DMI_BOARD_NAME, "cht"),
++		},
++		.driver_data = cht_cr_vars,
++       	},
+ 	{
+ 		.ident = "MRD7",
+ 		.matches = {
+@@ -317,14 +600,32 @@ static const struct dmi_system_id gmin_vars[] = {
  #define GMIN_PMC_CLK_NAME 14 /* "pmc_plt_clk_[0..5]" */
  static char gmin_pmc_clk_name[GMIN_PMC_CLK_NAME];
  
@@ -370,7 +376,7 @@ index bf9f34b7ad72..ff260c5cb9ba 100644
  
  	if (!client)
  		return NULL;
-@@ -315,6 +610,7 @@ static struct gmin_subdev *gmin_subdev_add(struct v4l2_subdev *subdev)
+@@ -340,6 +641,7 @@ static struct gmin_subdev *gmin_subdev_add(struct v4l2_subdev *subdev)
  		"gmin: initializing atomisp module subdev data.PMIC ID %d\n",
  		pmic_id);
  
@@ -378,9 +384,9 @@ index bf9f34b7ad72..ff260c5cb9ba 100644
  	gmin_subdevs[i].subdev = subdev;
  	gmin_subdevs[i].clock_num = gmin_get_var_int(dev, "CamClk", 0);
  	/*WA:CHT requires XTAL clock as PLL is not stable.*/
-@@ -325,6 +621,28 @@ static struct gmin_subdev *gmin_subdev_add(struct v4l2_subdev *subdev)
- 	gmin_subdevs[i].gpio0 = gpiod_get_index(dev, NULL, 0, GPIOD_OUT_LOW);
- 	gmin_subdevs[i].gpio1 = gpiod_get_index(dev, NULL, 1, GPIOD_OUT_LOW);
+@@ -348,6 +650,28 @@ static struct gmin_subdev *gmin_subdev_add(struct v4l2_subdev *subdev)
+ 	gmin_subdevs[i].csi_port = gmin_get_var_int(dev, "CsiPort", 0);
+ 	gmin_subdevs[i].csi_lanes = gmin_get_var_int(dev, "CsiLanes", 1);
  
 +        /* DVDD of front camera  */
 +        gmin_subdevs[i].eldo1_1p8v       = ELDO1_1P6V;
@@ -407,7 +413,7 @@ index bf9f34b7ad72..ff260c5cb9ba 100644
  	/* get PMC clock with clock framework */
  	snprintf(gmin_pmc_clk_name,
  		 sizeof(gmin_pmc_clk_name),
-@@ -412,6 +730,164 @@ static int gmin_gpio1_ctrl(struct v4l2_subdev *subdev, int on)
+@@ -437,6 +761,164 @@ static int gmin_gpio1_ctrl(struct v4l2_subdev *subdev, int on)
  	return -EINVAL;
  }
  
@@ -572,7 +578,7 @@ index bf9f34b7ad72..ff260c5cb9ba 100644
  static int gmin_v1p2_ctrl(struct v4l2_subdev *subdev, int on)
  {
  	struct gmin_subdev *gs = find_gmin_subdev(subdev);
-@@ -465,6 +941,32 @@ static int gmin_v1p8_ctrl(struct v4l2_subdev *subdev, int on)
+@@ -490,6 +972,32 @@ static int gmin_v1p8_ctrl(struct v4l2_subdev *subdev, int on)
  			return regulator_disable(gs->v1p8_reg);
  	}
  
@@ -605,7 +611,7 @@ index bf9f34b7ad72..ff260c5cb9ba 100644
  	return -EINVAL;
  }
  
-@@ -501,6 +1003,30 @@ static int gmin_v2p8_ctrl(struct v4l2_subdev *subdev, int on)
+@@ -526,6 +1034,30 @@ static int gmin_v2p8_ctrl(struct v4l2_subdev *subdev, int on)
  			return regulator_disable(gs->v2p8_reg);
  	}
  
