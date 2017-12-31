@@ -1,0 +1,37 @@
+diff --git a/drivers/staging/media/atomisp/platform/intel-mid/atomisp_gmin_platform.c b/drivers/staging/media/atomisp/platform/intel-mid/atomisp_gmin_platform.c
+index 87216bc35648..716be4ace60e 100644
+--- a/drivers/staging/media/atomisp/platform/intel-mid/atomisp_gmin_platform.c
++++ b/drivers/staging/media/atomisp/platform/intel-mid/atomisp_gmin_platform.c
+@@ -503,6 +503,18 @@ static struct gmin_cfg_var cht_cr_vars[] = {
+        {},
+ };
+ 
++static struct gmin_cfg_var miix320_vars[] = {
++        {"OVTI2680:00_CamType", "1"},
++        {"OVTI2680:00_CsiPort", "0"},
++        {"OVTI2680:00_CsiLanes", "1"},
++        {"OVTI2680:00_CsiFmt", "15"},
++        {"OVTI2680:00_CsiBayer", "0"},
++        {"OVTI2680:00_CamClk", "1"},
++        {"OVTI2680:00_Regulator1p8v", "0"},
++        {"OVTI2680:00_Regulator2p8v", "0"},
++        {},
++};
++
+ static struct gmin_cfg_var mrd7_vars[] = {
+ 	{"INT33F8:00_CamType", "1"},
+ 	{"INT33F8:00_CsiPort", "1"},
+@@ -566,6 +578,13 @@ static const struct dmi_system_id gmin_vars[] = {
+ 		},
+ 		.driver_data = cht_cr_vars,
+        	},
++	{
++                .ident = "MIIX320",
++                .matches = {
++                        DMI_MATCH(DMI_BOARD_NAME, "LNVNB161216"),
++                },
++                .driver_data = miix320_vars,
++        },
+ 	{
+ 		.ident = "MRD7",
+ 		.matches = {
